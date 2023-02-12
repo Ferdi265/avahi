@@ -838,6 +838,32 @@ static int load_config_file(DaemonConfig *c) {
 
                     avahi_strfreev(e);
                 }
+                else if (strcasecmp(p->key, "reflect-deny-query-interfaces") == 0) {
+                    char **e, **t;
+
+                    avahi_string_list_free(c->server_config.reflect_deny_query_interfaces);
+                    c->server_config.reflect_deny_query_interfaces = NULL;
+                    e = avahi_split_csv(p->value);
+
+                    for (t = e; *t; t++) {
+                        c->server_config.reflect_deny_query_interfaces = avahi_string_list_add(c->server_config.reflect_deny_query_interfaces, *t);
+                    }
+
+                    avahi_strfreev(e);
+                }
+                else if (strcasecmp(p->key, "reflect-deny-reply-interfaces") == 0) {
+                    char **e, **t;
+
+                    avahi_string_list_free(c->server_config.reflect_deny_reply_interfaces);
+                    c->server_config.reflect_deny_reply_interfaces = NULL;
+                    e = avahi_split_csv(p->value);
+
+                    for (t = e; *t; t++) {
+                        c->server_config.reflect_deny_reply_interfaces = avahi_string_list_add(c->server_config.reflect_deny_reply_interfaces, *t);
+                    }
+
+                    avahi_strfreev(e);
+                }
                 else {
                     avahi_log_error("Invalid configuration key \"%s\" in group \"%s\"\n", p->key, g->name);
                     goto finish;
